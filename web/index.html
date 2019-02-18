@@ -1,0 +1,140 @@
+<html>
+    <head>
+        <title></title>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+
+        <style>
+        
+        .card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+        </style>
+    </head>
+
+    <body>
+
+                <div style=" margin-top: 200px; width: 600px; margin: 200px auto">
+
+                        <form style="" id="uploadForm" enctype="multipart/form-data">
+
+                                <div class="alert alert-success" id="succ" > </div>
+                                <div class="form-group">
+                                  <label for="name">Name</label>
+                                  <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Product Name">
+                         
+                                </div>
+                                <div class="form-group">
+                                  <label for="price">Price</label>
+                                  <input type="text" class="form-control" id="price" name="price" placeholder="Product Price">
+                                </div>
+                                <div class="form-group">
+                                        <label for="description">Description</label>
+                                        <textarea  class="form-control" id="description" name= "description" ></textarea>
+                                </div>
+                                <div class="form-group">
+                                            <label for="color">Color</label>
+                                            <input type="text" class="form-control" id="color" name="color" placeholder="Product Color">
+                                </div>
+                                <div class="form-group">
+                                        <label for="price">Image</label>
+                                        <input type="file" class="form-control" id="productImage"  name="productImage">
+                                </div>
+                         
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                              </form>
+
+                                <h2 id="phead" style="display:none">PRODUCT DETAILS</h2>
+
+                              <div class="card" >
+                                    <img src="http://localhost:3000/uploads/2019-02-17T22:33:54.110Zmlogo.png" id="mimage" alt="Denim Jeans" style="width:100%">
+                                    <h1 id="pname"></h1>
+                                    <p class="price"  id="pprice"></p>
+                                    <p id="disc"></p>
+                                    <p><button>Add to Cart</button></p>
+                                  </div>
+
+
+
+                </div>
+<script>
+    $(document).ready(function (e) {
+        $('.card').hide();
+        $('#succ').hide();
+        $("#uploadForm").on('submit',(function(e) {
+	    
+		e.preventDefault();
+		$.ajax({
+        	url: "http://localhost:3000/product/",
+			type: "POST",
+			data:  new FormData($(this)[0]),
+			contentType: false,
+    	    cache: false,
+			processData:false,
+			success: function(data)
+		    {
+		       
+			  // alert(data.createdProduct._id);
+              if(data.success == false){
+                  alert(data.message);
+              }else if(data.success == true){
+                $('#succ').show();
+                  $('#succ').text("Product Created successfully");
+
+                  setInterval(function(){
+                    $('#uploadForm').hide();
+                  $('.card').show();
+                  $('#phead').show();
+                  }, 4000);
+
+                    $('#pname').text(data.createdProduct.name);
+                    $('#pprice').text("&#8358;"+data.createdProduct.price);
+                    $('#disc').text(data.createdProduct.description);
+                    $('#mimage').attr("src", "http://localhost:3000/"+data.createdProduct.image);
+
+              }
+               console.log(data);
+			   
+		    },
+		  	error: function(jqXHR, exception) 
+	    	{
+                console.log(jqXHR.responseText)
+                //alert(error.message);
+	    	} 	        
+	   });
+	}));
+       
+    });
+
+</script>
+    </body>
+    
+</html>
