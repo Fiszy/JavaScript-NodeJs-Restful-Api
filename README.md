@@ -12,7 +12,7 @@ from one copy request.url of any product then open in your browser
 It is of the form https://javascriptapi.herokuapp.com/product/anyid
 
 
-#to test for 3
+# to test for 3
 go to
 https://javascriptapi.herokuapp.com/web
 and fill the form then submit
